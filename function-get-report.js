@@ -297,7 +297,7 @@ const downloadReportCsv = async (tmpToken, reportResponse, report_id) => {
 		return reportCSV
 	}
 	catch (e) {
-		let error = `Failed to get CSV download: ${e}`
+		let error = `Failed to get CSV download for ${report_id}: ${e}`
 		throw error
 	}
 }
