@@ -51,7 +51,7 @@ exports.handler = async function (context, event, callback) {
 
 				if (reportResponse) {
 					// get report CSV
-					let reportCSV = await downloadReportCsv(tmpToken, reportResponse)
+					let reportCSV = await downloadReportCsv(tmpToken, reportResponse, reportId)
 
 					// check if the CSV has data
 					if (reportCSV && typeof reportCSV.data === "string") {
@@ -244,7 +244,7 @@ const getReportExport = async (tmpToken, workspace_id, object_id) => {
  * Includes "retries" for when we receive a 202 from the API
  * To learn more: https://www.twilio.com/docs/flex/developer/insights/api/export-data#download-the-report
  */
-const downloadReportCsv = async (tmpToken, reportResponse) => {
+const downloadReportCsv = async (tmpToken, reportResponse, report_id) => {
 	let reportCSV
 
 	//format request for csv download
@@ -272,7 +272,7 @@ const downloadReportCsv = async (tmpToken, reportResponse) => {
 
 				// if it wasn't successful by now, stop trying (this can be modified to try a few more times before giving up)
 				if (reportCSV.status != 200) {
-					console.log(`unable to fetch ${reportId} after 2 tries. try again later.`)
+					console.log(`unable to fetch ${report_id} after 2 tries. try again later.`)
 				}
 				else {
 					console.log("got csv")
@@ -284,14 +284,14 @@ const downloadReportCsv = async (tmpToken, reportResponse) => {
 			// if we don't get a 200 or a 201, it should error in the catch block
 			// this is just in case we get something very much unexpected
 			else {
-				console.log(`something unexpected happened when downloading CSV data for ${reportId}`)
+				console.log(`something unexpected happened when downloading CSV data for ${report_id}`)
 			}
 		}
 		else if (reportCSV.status === 200) {
 			console.log("got csv");
 		}
 		else {
-			console.log(`something unexpected happened when downloading CSV data for ${reportId}`)
+			console.log(`something unexpected happened when downloading CSV data for ${report_id}`)
 		}
 
 		return reportCSV
